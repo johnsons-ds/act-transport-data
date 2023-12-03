@@ -1,12 +1,18 @@
 # https://www.data.act.gov.au/resource/5x84-xpn7.csv
 
-#DATA_URL = ("https://www.data.act.gov.au/resource/nkxy-abdj.csv")
 
 
 import streamlit as st
 import pandas as pd
-import numpy as np
 import plotly.express as px
+
+def run():
+    st.set_page_config(
+        page_title="Daily Public Transport Passenger Journeys by Service Type",
+        page_icon="🚇",
+    )
+
+run()
 
 # Load your time series dataset
 # Assuming your dataset is in a CSV file named 'transport_data.csv'
@@ -31,7 +37,6 @@ st.markdown(
 """
 )
 
-
 @st.cache_data
 def load_data():
     data = pd.read_csv(DATA_URL)
@@ -48,20 +53,17 @@ def load_data():
     return data
 
 data = load_data()
-    
-#data.index
-
 weekly=data.resample('W').sum()
 
-if st.sidebar.checkbox('Show raw data'):
-  st.subheader('Raw data')
-  st.write(data)
+# Checkbox for the user to view the raw data
+if st.checkbox('Show raw data'):
+    st.subheader('Raw data')
+    st.write(data) 
+
 
 # Sidebar: User Input
-st.sidebar.title('User Input')
-#selected_year = st.sidebar.selectbox('Select Year', data.index.year.unique())  # Unique years in the index
+st.sidebar.title('Choose your input')
 date_range_option = st.sidebar.radio('Select Date Range', ['All Years', 'Custom Range'])
-#date_range = st.sidebar.date_input('Select Date Range', [data.index.min(), data.index.max()])
 selected_service = st.sidebar.selectbox('Select Service Type', data.columns)  # Excluding 'date' column
 
 if date_range_option == 'Custom Range':
@@ -73,11 +75,6 @@ else:
     filtered_weekly_data = weekly  # Show all years
 
 
-
-# Filter data based on user input
-#filtered_data = data[data.index.year == selected_year]
-#filtered__weekly_data = weekly[weekly.index.year == selected_year]
-#filtered_data = data.loc[date_range[0]:date_range[1]]
 
 # Main Content: Time Series Graph
 st.title('Time Series View')
@@ -109,7 +106,6 @@ fig.update_xaxes(rangeslider_visible=True,
                   tickvals=tick_positions,
                   ticktext=tick_labels)
 st.plotly_chart(fig)
-
 
 
 
