@@ -8,7 +8,7 @@ import plotly.express as px
 
 def run():
     st.set_page_config(
-        page_title="Daily Public Transport Passenger Journeys by Service Type",
+        page_title="Daily Public Transport Passenger Boardings by Service Type",
         page_icon="🚇",
     )
 
@@ -16,9 +16,9 @@ run()
 
 # Load your time series dataset
 # Assuming your dataset is in a CSV file named 'transport_data.csv'
-DATA_URL = ('https://www.data.act.gov.au/resource/nkxy-abdj.csv')
+DATA_URL = ('https://www.data.act.gov.au/resource/4f52-nub8.csv')
 
-st.write("# Daily Public Transport Passenger Journeys by Service Type")
+st.write("# Daily Public Transport Passenger Boardings by Service Type")
 st.markdown(
     """
     This dataset contains daily Public Transport Patronage in types of services. Paper tickets 
@@ -27,12 +27,12 @@ st.markdown(
     Note: Due to delays in data processing, final number may take up to three days to accurately report on all passenger journeys.
 
     Different service types:
-      * Local route - # of journeys performed by local routes
-      * Light rail - # of journeys performed by light rail
-      * Peak service - # of journeys performed on weekdays before 9 am and between 4.30 pm and 6 pm
-      * Rapid route - # of journeys performed by rapid routes
-      * School - # of journeys performed by school service
-      * Other - # of journeys performed by other services that are not mentioned above, such as shuttle services.
+      * Local route - # of boardings performed by local routes
+      * Light rail - # of boardings performed by light rail
+      * Peak service - # of boardings performed on weekdays before 9 am and between 4.30 pm and 6 pm
+      * Rapid route - # of boardings performed by rapid routes
+      * School - # of boardings performed by school service
+      * Other - # of boardings performed by other services that are not mentioned above, such as shuttle services.
 
 """
 )
