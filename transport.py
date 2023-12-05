@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-
+# Load packages
 import streamlit as st
 import pandas as pd
 import plotly.express as px
 import requests
-import csv
 
 # Define the URLs
 urls = {
@@ -26,8 +25,6 @@ urls = {
     'Passenger data of daily journey': 'https://www.data.act.gov.au/resource/nkxy-abdj.csv',
     'Daily boarding by passenger group': 'https://www.data.act.gov.au/resource/4d78-rcjw.csv'
 }
-
-
 
 
 # Sidebar: User Input
