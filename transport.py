@@ -17,9 +17,19 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+from streamlit_extras.colored_header import colored_header
 import requests
 
-# Define the URLs
+# Set page configuration
+st.set_page_config(
+    page_title="ACT Public Transport Data",
+    page_icon="🚆",
+    layout="centered",
+    initial_sidebar_state="auto"
+)
+
+
+# Define the URLs for data sources
 urls = {
     'Passenger data of daily boardings': 'https://www.data.act.gov.au/resource/4f52-nub8.csv',
     'Passenger data of daily journey': 'https://www.data.act.gov.au/resource/nkxy-abdj.csv',
@@ -33,7 +43,13 @@ selected_url = st.sidebar.selectbox('Select Data Source', options=list(urls.keys
 date_range_option = st.sidebar.radio('Select date range', ['All Years', 'Custom Year'])
 
 
-st.write("# ACT Public Transport Data")
+# Displaying a colored header with specified parameters
+colored_header(
+    label="ACT Public Transport 🚇 Data 📈",
+    description="~ Developed by johnsons-ds",
+    color_name="violet-70",
+)
+
 st.markdown(
     """
     This dataset contains daily Public Transport Patronage in types of services and passenger group. Paper tickets 
@@ -45,24 +61,24 @@ st.markdown(
     ***Data source: https://www.data.act.gov.au/browse?q=transport&sortBy=relevance***
 
     Different service types:
-      * Local route - # of boardings performed by local routes
-      * Light rail - # of boardings performed by light rail
-      * Peak service - # of boardings performed on weekdays before 9 am and between 4.30 pm and 6 pm
-      * Rapid route - # of boardings performed by rapid routes
-      * School - # of boardings performed by school service
-      * Other - # of boardings performed by other services that are not mentioned above, such as shuttle services.
+    * Local route - # of boardings performed by local routes
+    * Light rail - # of boardings performed by light rail
+    * Peak service - # of boardings performed on weekdays before 9 am and between 4.30 pm and 6 pm
+    * Rapid route - # of boardings performed by rapid routes
+    * School - # of boardings performed by school service
+    * Other - # of boardings performed by other services that are not mentioned above, such as shuttle services.
 
     Different passenger groups:
-      * Other - # of baordings performed by other group of passengers such as employee and welfare.
-      * Adult - # of boardings performed by adult
-      * Concession - # of boardings performed by concession
-      * Tertiary - # of boardings performed by tertiary
-      * Student - # of boardings performed by school students
+    * Other - # of baordings performed by other group of passengers such as employee and welfare.
+    * Adult - # of boardings performed by adult
+    * Concession - # of boardings performed by concession
+    * Tertiary - # of boardings performed by tertiary
+    * Student - # of boardings performed by school students
 
 """
 )
 
-#@st.cache_data
+# Load data
 def load_data():
     data = pd.read_csv(urls[selected_url])
     #data.dtypes
@@ -78,29 +94,36 @@ def load_data():
     return data
 
 
-data = load_data()
-weekly=data.resample('W').sum()
-monthly=data.resample('M').sum()
+data = load_data() # all data
+weekly=data.resample('W').sum() # data summed by weekly
+monthly=data.resample('M').sum() # data summed by month
 
-
+st.write("---")
 # Checkbox for the user to view the raw data
 if st.checkbox('Show raw data'):
     st.subheader('Raw data')
     st.write(data) 
 
 # Sidebar: User Input
-selected_service = st.sidebar.selectbox('Select service type/group', data.columns)  # Excluding 'date' column
-
+selected_service = st.sidebar.multiselect('Select service type/group', data.columns, default=data.columns[3])  # Excluding 'date' column
 
 if date_range_option == 'Custom Year':
-    selected_year = st.sidebar.selectbox('Select Year', data.index.year.unique())  # Unique years in the index
-    filtered_data = data[data.index.year == selected_year]
-    filtered_weekly_data = weekly[weekly.index.year == selected_year]
-    filtered_monthly_data = monthly[monthly.index.year == selected_year]
+    #selected_year = st.sidebar.date_input('Select Date Range', [data.index.min(), data.index.max()])
+    start_year = st.sidebar.date_input('Start date', data.index.min())
+    end_year = st.sidebar.date_input('End date', data.index.max())
+    # Validate date range
+    if pd.Timestamp(start_year) < pd.Timestamp(data.index.min()) or pd.Timestamp(end_year) > pd.Timestamp(data.index.max()) or pd.Timestamp(start_year) >= pd.Timestamp(end_year):
+        st.sidebar.error(f"Invalid date range. Please select a valid date range within the dataset's available range - {pd.Timestamp(data.index.min()).strftime('%Y/%m/%d')} to {pd.Timestamp(data.index.max()).strftime('%Y/%m/%d')}.")
+        st.stop()
+
+    filtered_data = data.loc[start_year:end_year]
+    filtered_weekly_data = weekly.loc[start_year:end_year]
+    filtered_monthly_data = monthly.loc[start_year:end_year]
 else:
     filtered_data = data  # Show all years
     filtered_weekly_data = weekly  # Show all years
     filtered_monthly_data = monthly # Show all years
+
 
 # Data download button
 if selected_url:
@@ -134,13 +157,16 @@ st.sidebar.markdown(
 """
 )
 
+
+
+
 # Chart Section
 
 # Pie Chart Section
-st.header('Composition of Selected Dataset')
+st.header(f'Charts of {selected_url.lower()}')
 
 # Get column names excluding the first column (date column)
-composition_columns = filtered_data.columns[1:]
+composition_columns = filtered_data.columns[0:]
 
 # Calculate the sum of each column in the filtered dataset
 composition_data = filtered_data[composition_columns].sum()
@@ -149,13 +175,15 @@ composition_data = filtered_data[composition_columns].sum()
 pie_fig = px.pie(
     names=composition_data.index,
     values=composition_data.values,
-    title=f'Composition of {selected_url}'
+    title=f'Pie chart of {selected_url.lower()}'
 )
-
+pie_fig.update_traces(textposition='inside', textinfo='percent+label')
 st.plotly_chart(pie_fig)
 
+
+
 # Main Content: Time Series Graph
-st.title('Time Series View')
+st.title(f'Line charts of {selected_url.lower()}')
 
 # Generate tick positions every six months
 tick_positions = pd.date_range(start=filtered_data.index.min(), end=filtered_data.index.max(), freq='3M')
@@ -163,37 +191,50 @@ tick_positions = pd.date_range(start=filtered_data.index.min(), end=filtered_dat
 # Generate tick labels in the format '%b %Y'
 tick_labels = tick_positions.strftime('%b\n%Y')
 
-# Calculate moving average
-moving_avg_window = 6  # Choose the window size for the moving average
-moving_avg = filtered_data[selected_service].rolling(window=moving_avg_window).mean()
+# Calculate moving average - SWITCHED OFF 7 December 2023
+#moving_avg_window = 6  # Choose the window size for the moving average
+#moving_avg = filtered_data[selected_service].rolling(window=moving_avg_window).mean()
+
 
 
 # Monthly view
 st.write("### Monthly view")
-fig2 = px.line(filtered_monthly_data, x=filtered_monthly_data.index, y=selected_service, title=f'Count of {selected_service} Over Time')
+fig2 = px.line(filtered_monthly_data, x=filtered_monthly_data.index, y=selected_service)
 
 # Customize the x-axis ticks
 fig2.update_xaxes(rangeslider_visible=True,
                   tickmode='array',
                   tickvals=tick_positions,
                   ticktext=tick_labels)
-st.plotly_chart(fig2)
+
+# Move the legend to the top of the chart
+fig2.update_traces(mode="lines", hovertemplate=None)
+fig2.update_layout(legend=dict(orientation="h", y=1.0, x=0.1),
+                  hovermode="x unified")
+st.plotly_chart(fig2, height=1000, width=1200)
+
+
 
 # Weekly view
 st.write("### Weekly view")
-fig1 = px.line(filtered_weekly_data, x=filtered_weekly_data.index, y=selected_service, title=f'Count of {selected_service} Over Time')
+fig1 = px.line(filtered_weekly_data, x=filtered_weekly_data.index, y=selected_service)
 
 # Customize the x-axis ticks
 fig1.update_xaxes(rangeslider_visible=True,
                   tickmode='array',
                   tickvals=tick_positions,
                   ticktext=tick_labels)
-st.plotly_chart(fig1)
+
+# Move the legend to the top of the chart
+fig1.update_traces(mode="lines", hovertemplate=None)
+fig1.update_layout(legend=dict(orientation="h", y=1.0, x=0.1),
+                  hovermode="x unified")
+st.plotly_chart(fig1, use_container_width=False, height=1000, width=1200)
 
 
 # Daily view
 st.write("### Daily view")
-fig = px.line(filtered_data, x=filtered_data.index, y=selected_service, title=f'Count of {selected_service} Over Time')
+fig = px.line(filtered_data, x=filtered_data.index, y=selected_service)
 
 # Customize the x-axis ticks
 fig.update_xaxes(rangeslider_visible=True,
@@ -201,9 +242,11 @@ fig.update_xaxes(rangeslider_visible=True,
                   tickvals=tick_positions,
                   ticktext=tick_labels)
 
-# Add moving average line trace
-fig.add_scatter(x=filtered_data.index, y=moving_avg, mode='lines', name=f'Moving Average ({moving_avg_window} months)', line_color='orange')
-st.plotly_chart(fig)
+# Move the legend to the top of the chart
+fig.update_traces(mode="lines", hovertemplate=None)
+fig.update_layout(legend=dict(orientation="h", y=1.0, x=0.1),
+                  hovermode="x unified")
+st.plotly_chart(fig, use_container_width=False, height=1000, width=1200)
 
 
 
