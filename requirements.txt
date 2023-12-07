@@ -4,4 +4,4 @@ pandas
 pydeck
 streamlit
 plotly.express
-streamlit_extras.colored_header
+streamlit_extras
