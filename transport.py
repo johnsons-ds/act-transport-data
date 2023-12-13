@@ -31,9 +31,9 @@ st.set_page_config(
 
 # Define the URLs for data sources
 urls = {
-    'Passenger data of daily boardings': 'https://www.data.act.gov.au/resource/4f52-nub8.csv',
+    'Passenger data of daily boardings': 'https://www.data.act.gov.au/resource/4f52-nub8.csv?$query=SELECT%20date%2C%20local_route%2C%20light_rail%2C%20peak_service%2C%20rapid_route%2C%20school%2C%20other%20ORDER%20BY%20%3Aid%20ASC',
     'Passenger data of daily journey': 'https://www.data.act.gov.au/resource/nkxy-abdj.csv',
-    'Daily boarding by passenger group': 'https://www.data.act.gov.au/resource/4d78-rcjw.csv'
+    'Daily boarding by passenger group': 'https://www.data.act.gov.au/resource/4d78-rcjw.csv?$query=SELECT%20date%2C%20other%2C%20adult%2C%20concession%2C%20tertiary%2C%20school_student%20ORDER%20BY%20date%20DESC'
 }
 
 
