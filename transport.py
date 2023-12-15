@@ -199,7 +199,10 @@ tick_labels = tick_positions.strftime('%b\n%Y')
 
 # Monthly view
 st.write("### Monthly view")
-fig2 = px.line(filtered_monthly_data, x=filtered_monthly_data.index, y=selected_service)
+fig2 = px.line(filtered_monthly_data, 
+               x=filtered_monthly_data.index, 
+               y=selected_service
+               )
 
 # Customize the x-axis ticks
 fig2.update_xaxes(rangeslider_visible=True,
@@ -212,14 +215,18 @@ fig2.update_xaxes(rangeslider_visible=True,
             dict(count=6, label="6m", step="month", stepmode="backward"),
             dict(count=1, label="YTD", step="year", stepmode="todate"),
             dict(count=1, label="1y", step="year", stepmode="backward"),
+            dict(count=2, label="2y", step="year", stepmode="backward"),
             dict(step="all")
-        ])
+        ]), yanchor='bottom'  # Position the range selector at the bottom
     ))
 
 # Move the legend to the top of the chart
 fig2.update_traces(mode="lines", hovertemplate=None)
-fig2.update_layout(legend=dict(orientation="h", y=0.95, x=0.8),
-                  hovermode="x unified")
+fig2.update_layout(legend=dict(orientation="h", 
+                   yanchor='bottom'),  # Position the range selector at the bottom
+                   hovermode="x unified",
+                   xaxis_title="",
+                   yaxis_title="# of passengers")
 st.plotly_chart(fig2, height=1000, width=1200)
 
 
@@ -239,14 +246,18 @@ fig1.update_xaxes(rangeslider_visible=True,
             dict(count=6, label="6m", step="month", stepmode="backward"),
             dict(count=1, label="YTD", step="year", stepmode="todate"),
             dict(count=1, label="1y", step="year", stepmode="backward"),
+            dict(count=2, label="2y", step="year", stepmode="backward"),
             dict(step="all")
         ])
     ))
 
 # Move the legend to the top of the chart
 fig1.update_traces(mode="lines", hovertemplate=None)
-fig1.update_layout(legend=dict(orientation="h", y=0.95, x=0.8),
-                  hovermode="x unified")
+fig1.update_layout(legend=dict(orientation="h", 
+                   yanchor='bottom'),  # Position the range selector at the bottom
+                   hovermode="x unified",
+                   xaxis_title="",
+                   yaxis_title="# of passengers")
 st.plotly_chart(fig1, use_container_width=False, height=1000, width=1200)
 
 
@@ -265,14 +276,18 @@ fig.update_xaxes(rangeslider_visible=True,
             dict(count=6, label="6m", step="month", stepmode="backward"),
             dict(count=1, label="YTD", step="year", stepmode="todate"),
             dict(count=1, label="1y", step="year", stepmode="backward"),
+            dict(count=2, label="2y", step="year", stepmode="backward"),
             dict(step="all")
         ])
     ))
 
 # Move the legend to the top of the chart
 fig.update_traces(mode="lines", hovertemplate=None)
-fig.update_layout(legend=dict(orientation="h", y=0.95, x=0.8),
-                  hovermode="x unified")
+fig.update_layout(legend=dict(orientation="h", 
+                   yanchor='bottom'),  # Position the range selector at the bottom
+                   hovermode="x unified",
+                   xaxis_title="",
+                   yaxis_title="# of passengers")
 st.plotly_chart(fig, use_container_width=False, height=1000, width=1200)
 
 
