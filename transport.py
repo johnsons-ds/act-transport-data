@@ -125,16 +125,6 @@ else:
     filtered_monthly_data = monthly # Show all years
 
 
-# Data download button
-if selected_url:
-    response = requests.get(urls[selected_url])
-    if response.status_code == 200:
-        file_name = selected_url.split('/')[-1]  # Extract filename from URL
-
-        st.sidebar.download_button(label='Download Data', data=response.content, file_name=file_name)
-    else:
-        st.error(f"Error fetching data from {urls[selected_url]}")
-
 st.sidebar.markdown(
     """
     
