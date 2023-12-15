@@ -218,7 +218,7 @@ fig2.update_xaxes(rangeslider_visible=True,
 
 # Move the legend to the top of the chart
 fig2.update_traces(mode="lines", hovertemplate=None)
-fig2.update_layout(legend=dict(orientation="h", y=1.0, x=0.1),
+fig2.update_layout(legend=dict(orientation="h", y=0.95, x=0.8),
                   hovermode="x unified")
 st.plotly_chart(fig2, height=1000, width=1200)
 
@@ -245,7 +245,7 @@ fig1.update_xaxes(rangeslider_visible=True,
 
 # Move the legend to the top of the chart
 fig1.update_traces(mode="lines", hovertemplate=None)
-fig1.update_layout(legend=dict(orientation="h", y=1.0, x=0.1),
+fig1.update_layout(legend=dict(orientation="h", y=0.95, x=0.8),
                   hovermode="x unified")
 st.plotly_chart(fig1, use_container_width=False, height=1000, width=1200)
 
@@ -271,7 +271,7 @@ fig.update_xaxes(rangeslider_visible=True,
 
 # Move the legend to the top of the chart
 fig.update_traces(mode="lines", hovertemplate=None)
-fig.update_layout(legend=dict(orientation="h", y=1.0, x=0.1),
+fig.update_layout(legend=dict(orientation="h", y=0.95, x=0.8),
                   hovermode="x unified")
 st.plotly_chart(fig, use_container_width=False, height=1000, width=1200)
 
