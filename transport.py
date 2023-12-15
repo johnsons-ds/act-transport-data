@@ -205,7 +205,16 @@ fig2 = px.line(filtered_monthly_data, x=filtered_monthly_data.index, y=selected_
 fig2.update_xaxes(rangeslider_visible=True,
                   tickmode='array',
                   tickvals=tick_positions,
-                  ticktext=tick_labels)
+                  ticktext=tick_labels,
+                  rangeselector=dict(
+        buttons=list([
+            dict(count=1, label="1m", step="month", stepmode="backward"),
+            dict(count=6, label="6m", step="month", stepmode="backward"),
+            dict(count=1, label="YTD", step="year", stepmode="todate"),
+            dict(count=1, label="1y", step="year", stepmode="backward"),
+            dict(step="all")
+        ])
+    ))
 
 # Move the legend to the top of the chart
 fig2.update_traces(mode="lines", hovertemplate=None)
@@ -223,7 +232,16 @@ fig1 = px.line(filtered_weekly_data, x=filtered_weekly_data.index, y=selected_se
 fig1.update_xaxes(rangeslider_visible=True,
                   tickmode='array',
                   tickvals=tick_positions,
-                  ticktext=tick_labels)
+                  ticktext=tick_labels,
+                  rangeselector=dict(
+        buttons=list([
+            dict(count=1, label="1m", step="month", stepmode="backward"),
+            dict(count=6, label="6m", step="month", stepmode="backward"),
+            dict(count=1, label="YTD", step="year", stepmode="todate"),
+            dict(count=1, label="1y", step="year", stepmode="backward"),
+            dict(step="all")
+        ])
+    ))
 
 # Move the legend to the top of the chart
 fig1.update_traces(mode="lines", hovertemplate=None)
@@ -240,7 +258,16 @@ fig = px.line(filtered_data, x=filtered_data.index, y=selected_service)
 fig.update_xaxes(rangeslider_visible=True,
                   tickmode='array',
                   tickvals=tick_positions,
-                  ticktext=tick_labels)
+                  ticktext=tick_labels,
+                  rangeselector=dict(
+        buttons=list([
+            dict(count=1, label="1m", step="month", stepmode="backward"),
+            dict(count=6, label="6m", step="month", stepmode="backward"),
+            dict(count=1, label="YTD", step="year", stepmode="todate"),
+            dict(count=1, label="1y", step="year", stepmode="backward"),
+            dict(step="all")
+        ])
+    ))
 
 # Move the legend to the top of the chart
 fig.update_traces(mode="lines", hovertemplate=None)
