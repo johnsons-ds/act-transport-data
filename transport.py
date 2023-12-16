@@ -207,13 +207,13 @@ fig2.update_xaxes(rangeslider_visible=True,
             dict(count=1, label="1y", step="year", stepmode="backward"),
             dict(count=2, label="2y", step="year", stepmode="backward"),
             dict(step="all")
-        ]), yanchor='bottom'  # Position the range selector at the bottom
+        ]), xanchor='left', yanchor="middle"  # Position the range selector at the middle
     ))
 
 # Move the legend to the top of the chart
 fig2.update_traces(mode="lines", hovertemplate=None)
 fig2.update_layout(legend=dict(orientation="h", 
-                   yanchor='bottom'),  # Position the range selector at the bottom
+                   yanchor='bottom'),  # Position the variables
                    hovermode="x unified",
                    xaxis_title="",
                    yaxis_title="# of passengers")
@@ -238,7 +238,7 @@ fig1.update_xaxes(rangeslider_visible=True,
             dict(count=1, label="1y", step="year", stepmode="backward"),
             dict(count=2, label="2y", step="year", stepmode="backward"),
             dict(step="all")
-        ])
+        ]), xanchor='left', yanchor="middle"  # Position the range selector at the middle
     ))
 
 # Move the legend to the top of the chart
@@ -268,7 +268,7 @@ fig.update_xaxes(rangeslider_visible=True,
             dict(count=1, label="1y", step="year", stepmode="backward"),
             dict(count=2, label="2y", step="year", stepmode="backward"),
             dict(step="all")
-        ])
+        ]), xanchor='left', yanchor="middle"  # Position the range selector at the middle
     ))
 
 # Move the legend to the top of the chart
